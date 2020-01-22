@@ -1,5 +1,6 @@
 # LYHF-LibAssist
-This is for software quality course project  
+Topic: Librarian Assistant  
+This is for software quality course project    
 We will develop a librarian assistant to help librarians manage common library management tasks, including user registration, book searching, shelving books, checking out books, and returning books. Users can also browse the books in the library and see detailed information about each book selected.
 
 Team info：
