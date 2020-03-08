@@ -13,7 +13,7 @@ James Halvorsen james.halvorsen@wsu.edu 11583795
 
 Jiawen Fu jiawen.fu@wsu.edu 11599619
 
-Java version: JDK1.8
+Java version: JDK1.8  
 MySql version: 8.0.19
 
 
