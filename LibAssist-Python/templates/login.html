@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Library Assistant Login</h1>
+
+<form method="POST">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username" required><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br>
+    <input type="submit" formaction="/login" value="Login">
+    <input type="submit" formaction="/register" value="Register">
+</form>
+{% if message %}
+<script>alert("{{ message }}");</script>
+{% endif %}
+</body>
+</html>
