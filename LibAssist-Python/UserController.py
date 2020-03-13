@@ -22,12 +22,15 @@ def create_user(username, password, isadmin=0):
 def validate_user(username, password):
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+        cursor.execute(
+            "SELECT password FROM users WHERE username=?",
+            (username,)
+        )
         tup = cursor.fetchone()
 
         if tup is None:
             return False
 
-        pwhash = tup[1]
+        pwhash = tup[0]
         pwutf8 = bytes(password, 'utf-8')
         return bcrypt.checkpw(pwutf8, pwhash)
