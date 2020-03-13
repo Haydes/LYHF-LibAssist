@@ -3,9 +3,10 @@
 from flask import Flask, redirect, render_template, request, session, url_for
 from UserController import validate_user, create_user
 from sqlite3 import IntegrityError
+import secrets
 
 app = Flask(__name__)
-app.secret_key = b"Totally secret"
+app.secret_key = secrets.token_bytes(32)
 
 
 # Display landing page for website
