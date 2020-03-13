@@ -12,7 +12,7 @@ def create_user(username, password, isadmin=0):
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO users VALUES (?, ?, ?)",
+            "INSERT INTO users(username, password, isadmin) VALUES (?, ?, ?)",
             (username, hashed, isadmin)
         )
         conn.commit()

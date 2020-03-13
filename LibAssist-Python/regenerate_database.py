@@ -2,10 +2,11 @@
 # This script is used to recreate the file library.db with some default values.
 # As the database is not committed to github (it's a binary file), and we may
 # wish to change the values in it by default, anything to be added to the
-# database shohuld be put in this script.
+# database should be put in this script.
 
 
 from UserController import create_user
+from BookController import create_book
 import sqlite3
 import os
 
@@ -28,7 +29,13 @@ def regenerate_tables():
 def regenerate_users():
     create_user('Jack', 'ilovefruits')
     create_user('Jill', 'iloveapples')
+    create_user('Haydes','111')
 
+
+# Repopulate the book table
+def regenerate_books():
+    create_book(123456, "Data science", "Cai", "2020-02-23")
+    create_book(421312, "Like", "Bill Gates", "2019-01-01")
 
 if __name__ == '__main__':
     regenerate_tables()
