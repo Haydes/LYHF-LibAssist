@@ -3,28 +3,18 @@
 import sqlite3
 import bcrypt
 
-_conn = sqlite3.connect("library.db")
-_c = _conn.cursor()
-_c.execute(
-    """
-    CREATE TABLE IF NOT EXISTS users (
-        username text PRIMARY KEY,
-        password blob,
-        isadmin integer
-    )
-    """
-)
-_c.close()
-_conn.commit()
 
-
-# Create a new user with no admin privileges.
-def create_user(username, password):
+# Create a new user. By default, no admin privileges are assumed.
+# For librarians, set isadmin=1.
+def create_user(username, password, isadmin=0):
     pwutf8 = bytes(password, 'utf-8')
     hashed = bcrypt.hashpw(pwutf8, bcrypt.gensalt(12))
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users VALUES (?, ?, 0)", (username, hashed))
+        cursor.execute(
+            "INSERT INTO users VALUES (?, ?, ?)",
+            (username, hashed, isadmin)
+        )
         conn.commit()
 
 
