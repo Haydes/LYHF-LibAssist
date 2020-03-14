@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 from flask import Flask, redirect, render_template, request, session, url_for
-from UserController import validate_user, create_user
+from UserController import validate_user, create_user, get_ISBN
+from BookController import get_book
 from sqlite3 import IntegrityError
 import secrets
 
@@ -14,7 +15,11 @@ app.secret_key = secrets.token_bytes(32)
 def index():
     if 'username' in session:
         username = session['username']
-        return render_template('mainpage.html', name=username)
+        isbn = get_ISBN(username)
+        book = None
+        if isbn != 0:
+            book = get_book(isbn)
+        return render_template('mainpage.html', name=username, bookObj=book)
     else:
         return render_template('login.html', message=None)
 

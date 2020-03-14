@@ -34,3 +34,17 @@ def validate_user(username, password):
         pwhash = tup[0]
         pwutf8 = bytes(password, 'utf-8')
         return bcrypt.checkpw(pwutf8, pwhash)
+
+def get_ISBN(username):
+    with sqlite3.connect("library.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT bookISBN FROM users WHERE username=?",
+            (username,)
+        )
+
+        tup = cursor.fetchone()
+        if tup is None:
+            return None
+        ISBN = tup[0]
+        return ISBN

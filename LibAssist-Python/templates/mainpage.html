@@ -4,6 +4,13 @@
 
 <h1>Library Assistant Main Page</h1>
 <p>Hello, {{ name }}</p>
+{% if bookObj %}
+<p>Your book:</p>
+<p>ISBN: {{ bookObj.ISBN }}</p>
+<p>title: {{ bookObj.title }}</p>
+<p>author: {{ bookObj.author }}</p>
+<p>publish date: {{ bookObj.pubDate }}</p>
+{% endif %}
 <form method="POST" action="/logout">
     <input type="submit" value="logout">
 </form>
