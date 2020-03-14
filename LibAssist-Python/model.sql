@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS users (
     username text PRIMARY KEY NOT NULL,
     password blob,
     isadmin integer,
-    bookISBN integer
+    bookISBN integer DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS book (
