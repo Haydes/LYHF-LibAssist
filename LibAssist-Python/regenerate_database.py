@@ -29,7 +29,7 @@ def regenerate_tables():
 def regenerate_users():
     create_user('Jack', 'ilovefruits')
     create_user('Jill', 'iloveapples')
-    create_user('Haydes','111')
+    create_user('Haydes', '111')
 
 
 # Repopulate the book table
@@ -37,6 +37,8 @@ def regenerate_books():
     create_book(1234560000, "Data science", "Cai", "2020-02-23")
     create_book(4213120000, "Like", "Bill Gates", "2019-01-01")
 
+
 if __name__ == '__main__':
     regenerate_tables()
     regenerate_users()
+    regenerate_books()
