@@ -14,6 +14,8 @@ def create_book(ISBN, title, author, pubDate):
         )
         conn.commit()
 
+
+# Get a book associated with some ISBN
 def get_book(ISBN):
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
