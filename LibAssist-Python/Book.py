@@ -9,4 +9,3 @@ class Book:
 
     def setUser(self, user):
         self.user = user
-

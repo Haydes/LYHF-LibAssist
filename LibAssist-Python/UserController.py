@@ -35,6 +35,8 @@ def validate_user(username, password):
         pwutf8 = bytes(password, 'utf-8')
         return bcrypt.checkpw(pwutf8, pwhash)
 
+
+# Get the ISBN associated with the book a user has borrowed.
 def get_ISBN(username):
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
