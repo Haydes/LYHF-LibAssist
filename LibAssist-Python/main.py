@@ -14,12 +14,7 @@ app.secret_key = secrets.token_bytes(32)
 @app.route('/')
 def index():
     if 'username' in session:
-        username = session['username']
-        isbn = get_ISBN(username)
-        book = None
-        if isbn != 0:
-            book = get_book(isbn)
-        return render_template('mainpage.html', name=username, bookObj=book)
+        return mainpage()
     else:
         return render_template('login.html', message=None)
 
@@ -48,6 +43,22 @@ def login():
         return redirect(url_for('index'))
     else:
         return render_template('login.html', message='Invalid credentials')
+
+
+# Handle main page
+def mainpage(msg=None):
+    template = 'mainpage.html'
+    username = session['username']
+
+    if msg:
+        return render_template(template, name=username, book=None, message=msg)
+
+    isbn = get_ISBN(username)
+    if isbn == 0:
+        return render_template(template, name=username, book=None, message=msg)
+
+    book = get_book(isbn)
+    render_template(template, name=username, book=book, message=msg)
 
 
 # Handle logging out

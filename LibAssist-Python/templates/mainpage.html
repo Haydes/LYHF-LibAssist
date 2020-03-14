@@ -4,12 +4,21 @@
 
 <h1>Library Assistant Main Page</h1>
 <p>Hello, {{ name }}</p>
-{% if bookObj %}
-<p>Your book:</p>
-<p>ISBN: {{ bookObj.ISBN }}</p>
-<p>title: {{ bookObj.title }}</p>
-<p>author: {{ bookObj.author }}</p>
-<p>publish date: {{ bookObj.pubDate }}</p>
+{% if book %}
+<p>You have a checked out book!</p><br>
+<p>Title: {{ book.title }}</p><br>
+<p>Author: {{ book.author }}</p><br>
+<p>Publication Date: {{ book.pubDate }}</p><br>
+<p>ISBN: {{ book.ISBN }}</p><br>
+<form method="POST" action="/checkin">
+    <input type="submit" value="return book">
+</form>
+{% else %}
+<form method="POST" action="/checkout">
+    <label for="booktitle">Title:</label><br>
+    <input type="text" id="booktitle" required>
+    <input type="submit" value="checkout"><br>
+</form>
 {% endif %}
 <form method="POST" action="/logout">
     <input type="submit" value="logout">
