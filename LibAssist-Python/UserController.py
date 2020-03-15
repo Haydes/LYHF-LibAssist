@@ -121,3 +121,18 @@ def isLibrarian(username):
             return False
         else:
             return True
+
+
+def return_book(username):
+    ISBN = get_ISBN(username)
+    with sqlite3.connect("library.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE users set bookISBN=0 WHERE username=?",
+            (username,)
+        )
+        cursor.execute(
+            "UPDATE book set username=null WHERE ISBN=?",
+            (ISBN,)
+        )
+        conn.commit()
