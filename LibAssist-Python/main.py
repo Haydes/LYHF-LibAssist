@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 
 from flask import Flask, redirect, render_template, request, session, url_for
-from UserController import validate_user, create_user, get_ISBN
+from UserController import (
+    validate_user, create_user,
+    get_ISBN,
+    borrow_book_byTitle,
+    return_book
+)
 from BookController import get_book
 from sqlite3 import IntegrityError
 import secrets
@@ -58,7 +63,44 @@ def mainpage(msg=None):
         return render_template(template, name=username, book=None, message=msg)
 
     book = get_book(isbn)
-    render_template(template, name=username, book=book, message=msg)
+    return render_template(template, name=username, book=book, message=msg)
+
+
+# Handle returning books
+@app.route('/checkin', methods=['POST'])
+def checkin():
+    if 'username' not in session:
+        return render_template('login.html', message='You are not logged in')
+    username = session['username']
+    return_book(username)
+    return redirect(url_for('index'))
+
+
+# Handle checking out a book
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    if 'username' not in session:
+        return render_template('login.html', message='You are not logged in')
+
+    for key in request.form.keys():
+        print(key)
+
+    title = request.form['booktitle']
+    username = session['username']
+    result = borrow_book_byTitle(title, username)
+
+    # 0: No book found
+    if result == 0:
+        return mainpage(msg='Cannot check out book: Book not found')
+    # 1: Book already being borrowed
+    elif result == 1:
+        return mainpage(msg='Cannot check out book: Book already borrowed')
+    # 2: Book successfully borrowed
+    elif result == 2:
+        return redirect(url_for('index'))
+    # Some other return code
+    else:
+        return mainpage(msg='Cannot check out book: Unknown error')
 
 
 # Handle logging out

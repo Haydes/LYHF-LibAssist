@@ -36,6 +36,7 @@ def validate_user(username, password):
         pwutf8 = bytes(password, 'utf-8')
         return bcrypt.checkpw(pwutf8, pwhash)
 
+
 def get_ISBN(username):
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
@@ -50,6 +51,7 @@ def get_ISBN(username):
         ISBN = tup[0]
         return ISBN
 
+
 def borrow_book_byISBN(ISBN, username):
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
@@ -60,10 +62,10 @@ def borrow_book_byISBN(ISBN, username):
 
         tup = cursor.fetchone()
         if tup is None:
-            return 0    #no book found
-        user = tup[1]    #username from the book table
+            return 0   # no book found
+        user = tup[1]  # username from the book table
         if user is not None:
-            return 1 #other user have got the book
+            return 1   # other user have got the book
         else:
             cursor.execute(
                 "UPDATE book SET username=? where ISBN=?",
@@ -74,36 +76,40 @@ def borrow_book_byISBN(ISBN, username):
                 (ISBN, username,)
             )
             conn.commit()
-            return  2 #successfully check out
+            return 2  # successfully check out
 
 
 def borrow_book_byTitle(title, username):
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT title, username FROM book where title=?",
+            "SELECT ISBN, username FROM book where title=?",
             (title,)
         )
 
         tup = cursor.fetchone()
         if tup is None:
             return 0  # no book found
-        user = tup[1]   #username from the book table
+
+        ISBN = tup[0]  # isbn from the book table
+        user = tup[1]  # username from the book table
+
         if user is not None:
             return 1  # other user have got the book
         else:
             cursor.execute(
-                "UPDATE book SET username=? where title=?",
-                (username, title,)
+                "UPDATE book SET username=? where ISBN=?",
+                (username, ISBN,)
             )
             cursor.execute(
-                "UPDATE users SET title=? where username=?",
-                (title, username,)
+                "UPDATE users SET bookISBN=? where username=?",
+                (ISBN, username,)
             )
             conn.commit()
             return 2  # successfully check out
 
-#check whether the user is librarian
+
+# check whether the user is librarian
 def isLibrarian(username):
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
