@@ -4,7 +4,7 @@ from flask import Flask, redirect, render_template, request, session, url_for
 from UserController import (
     validate_user, create_user,
     get_ISBN,
-    borrow_book_byTitle,
+    borrow_book_byISBN, borrow_book_byTitle,
     return_book
 )
 from BookController import get_book
@@ -82,12 +82,20 @@ def checkout():
     if 'username' not in session:
         return render_template('login.html', message='You are not logged in')
 
-    for key in request.form.keys():
-        print(key)
+    bookid = request.form['bookid']
+    idtype = request.form['idtype']
+ 
+    # Extract search method
+    borrow_fn = None
+    if idtype == 'use-title':
+        borrow_fn = borrow_book_byTitle
+    elif idtype == 'use-isbn':
+        borrow_fn = borrow_book_byISBN
+    else:
+        return mainpage(msg="Error: must select title or isbn")
 
-    title = request.form['booktitle']
     username = session['username']
-    result = borrow_book_byTitle(title, username)
+    result = borrow_fn(bookid, username)
 
     # 0: No book found
     if result == 0:
