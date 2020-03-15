@@ -103,8 +103,8 @@ def borrow_book_byTitle(title, username):
             conn.commit()
             return 2  # successfully check out
 
-#can only be done by
-def add_book(username, book):
+#check whether the user is librarian
+def isLibrarian(username):
     with sqlite3.connect("library.db") as conn:
         cursor = conn.cursor()
         cursor.execute(
@@ -120,5 +120,4 @@ def add_book(username, book):
         if isadmin == 0:
             return False
         else:
-            create_book(book.ISBN, book.title, book.author, book.pubDate)
             return True
