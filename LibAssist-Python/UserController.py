@@ -2,6 +2,7 @@
 
 import sqlite3
 import bcrypt
+from BookController import create_book
 
 
 # Create a new user. By default, no admin privileges are assumed.
@@ -101,3 +102,23 @@ def borrow_book_byTitle(title, username):
             )
             conn.commit()
             return 2  # successfully check out
+
+#can only be done by
+def add_book(username, book):
+    with sqlite3.connect("library.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT isadmin FROM users WHERE username=?",
+            (username,)
+        )
+
+        tup = cursor.fetchone()
+        if tup is None:
+            return False
+
+        isadmin = tup[0]
+        if isadmin == 0:
+            return False
+        else:
+            create_book(book.ISBN, book.title, book.author, book.pubDate)
+            return True
