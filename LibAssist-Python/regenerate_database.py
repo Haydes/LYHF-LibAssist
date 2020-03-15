@@ -29,7 +29,7 @@ def regenerate_tables():
 def regenerate_users():
     create_user('Jack', 'ilovefruits')
     create_user('Jill', 'iloveapples')
-    create_user('Haydes', '111')
+    create_user('Haydes', '111', 1)
 
 
 # Repopulate the book table
