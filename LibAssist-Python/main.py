@@ -7,7 +7,7 @@ from UserController import (
     borrow_book_byISBN, borrow_book_byTitle,
     return_book
 )
-from BookController import get_book, show_books
+from BookController import get_book, show_books, create_book
 from sqlite3 import IntegrityError
 import secrets
 
@@ -48,29 +48,6 @@ def login():
         return redirect(url_for('index'))
     else:
         return render_template('login.html', message='Invalid credentials')
-
-
-# Handle main page
-def mainpage(msg=None):
-    template = 'mainpage.html'
-    username = session['username']
-    isadmin = isLibrarian(username)
-
-    if msg:
-        return render_template(
-            template, name=username, admin=isadmin,
-            book=None, message=msg
-        )
-
-    isbn = get_ISBN(username)
-    book = None
-    if isbn != 0:
-        book = get_book(isbn)
-
-    return render_template(
-        template, name=username, admin=isadmin,
-        book=book, message=msg
-    )
 
 
 # Handle returning books
@@ -130,6 +107,73 @@ def logout():
 def showbooks_handler():
     books = show_books()
     return render_template('showbooks.html', booklist=books)
+
+
+# Librarian control panel/admin page
+@app.route('/admin', methods=['GET'])
+def admin_handler():
+    if 'username' not in session:
+        return render_template('login.html', message='You are not logged in')
+
+    username = session['username']
+    isadmin = isLibrarian(username)
+    if not isadmin:
+        return mainpage(msg='Only administrative users may access that page')
+    return adminpage()
+
+
+# Add books from librarian control panel
+@app.route('/addbook', methods=['POST'])
+def addbook():
+    if 'username' not in session:
+        return render_template('login.html', message='You are not logged in')
+
+    username = session['username']
+    isadmin = isLibrarian(username)
+    if not isadmin:
+        return mainpage(msg='Only administrative users may access that page')
+
+    title = request.form['title']
+    isbn = request.form['isbn']
+    author = request.form['author']
+    pubdate = request.form['pubdate']
+
+    try:
+        isbn = int(isbn)
+    except ValueError:
+        return adminpage(msg='Invalid ISBN (should be integer)')
+
+    create_book(isbn, title, author, pubdate)
+    return adminpage(msg='Success! Book entered into database')
+
+
+# Handle main page with possible message
+def mainpage(msg=None):
+    template = 'mainpage.html'
+    username = session['username']
+    isadmin = isLibrarian(username)
+
+    if msg:
+        return render_template(
+            template, name=username, admin=isadmin,
+            book=None, message=msg
+        )
+
+    isbn = get_ISBN(username)
+    book = None
+    if isbn != 0:
+        book = get_book(isbn)
+
+    return render_template(
+        template, name=username, admin=isadmin,
+        book=book, message=msg
+    )
+
+
+# Handle admin page with possible message
+def adminpage(msg=None):
+    username = session['username']
+    return render_template('admin.html', name=username, message=msg)
 
 
 if __name__ == '__main__':

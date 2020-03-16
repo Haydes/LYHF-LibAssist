@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Librarian Control Panel</h1>
+<p>Hello, {{ name }}</p>
+
+<h2>Add Book:</h2>
+<form method="POST" action="/addbook">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title" required><br>
+    <label for="author">Author:</label><br>
+    <input type="text" id="author" name="author" required><br>
+    <label for="isbn">ISBN:</label><br>
+    <input type="text" id="isbn" name="isbn" required><br>
+    <label for="pubdate">Publication Date:</label><br>
+    <input type="text" id="pubdate" name="pubdate" required><br>
+    <input type="submit" value="Add Book">
+</form>
+<form method="GET" action="/">
+    <input type="submit" value="Return to Main Page">
+</form>
+{% if message %}
+<script>alert("{{ message }}");</script>
+{% endif %}
+</body>
+</html>
