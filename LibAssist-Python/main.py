@@ -7,7 +7,7 @@ from UserController import (
     borrow_book_byISBN, borrow_book_byTitle,
     return_book
 )
-from BookController import get_book
+from BookController import get_book, show_books
 from sqlite3 import IntegrityError
 import secrets
 
@@ -84,7 +84,7 @@ def checkout():
 
     bookid = request.form['bookid']
     idtype = request.form['idtype']
- 
+
     # Extract search method
     borrow_fn = None
     if idtype == 'use-title':
@@ -117,6 +117,11 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+
+@app.route('/showbooks', methods=['GET'])
+def showbooks_handler():
+    books = show_books()
+    return render_template('showbooks.html', booklist=books)
 
 if __name__ == '__main__':
     app.run('127.0.0.1', 5000)
