@@ -2,7 +2,7 @@
 
 from flask import Flask, redirect, render_template, request, session, url_for
 from UserController import (
-    validate_user, create_user,
+    validate_user, create_user, isLibrarian,
     get_ISBN,
     borrow_book_byISBN, borrow_book_byTitle,
     return_book
@@ -54,16 +54,23 @@ def login():
 def mainpage(msg=None):
     template = 'mainpage.html'
     username = session['username']
+    isadmin = isLibrarian(username)
 
     if msg:
-        return render_template(template, name=username, book=None, message=msg)
+        return render_template(
+            template, name=username, admin=isadmin,
+            book=None, message=msg
+        )
 
     isbn = get_ISBN(username)
-    if isbn == 0:
-        return render_template(template, name=username, book=None, message=msg)
+    book = None
+    if isbn != 0:
+        book = get_book(isbn)
 
-    book = get_book(isbn)
-    return render_template(template, name=username, book=book, message=msg)
+    return render_template(
+        template, name=username, admin=isadmin,
+        book=book, message=msg
+    )
 
 
 # Handle returning books
@@ -118,10 +125,12 @@ def logout():
     return redirect(url_for('index'))
 
 
+# Display all books in database not currently checked out
 @app.route('/showbooks', methods=['GET'])
 def showbooks_handler():
     books = show_books()
     return render_template('showbooks.html', booklist=books)
+
 
 if __name__ == '__main__':
     app.run('127.0.0.1', 5000)

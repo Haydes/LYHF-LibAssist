@@ -3,7 +3,7 @@
 <body>
 
 <h1>Library Assistant Main Page</h1>
-<p>Hello, {{ name }}</p>
+<p>Hello, {{ name }}{% if admin %} <span style="font-weight:bold">(admin)</span>{% endif %}</p>
 {% if book %}
 <p>You have a checked out book!</p>
 <p>Title: {{ book.title }}</p>
@@ -22,6 +22,12 @@
     <label for="radio-isbn">ISBN:</label>
     <input type="radio" id="radio-isbn" name="idtype" value="use-isbn" required>
     <input type="submit" value="checkout"><br>
+</form>
+<br>
+{% endif %}
+{% if admin %}
+<form method="GET" action="/admin">
+    <input type="submit" value="librarian control panel">
 </form>
 {% endif %}
 <form method="GET" action="/showbooks">
