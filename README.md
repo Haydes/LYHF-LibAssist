@@ -17,6 +17,11 @@ Jiawen Fu jiawen.fu@wsu.edu 11599619
 Java version: JDK1.8  
 MySql version: 8.0.19
 -->
-The LibAssist-Python directory should contain all files necessary to run the Library Assistant server. Any files other than this README.md and LibAssist-Python are from an older prototype no longer being developed. They can be ignored.
 
-Later I will modify details.
+The documentation PDF should indicate how to use the website. Note that in order to start the server, two scripts must be run:
+
+1. LibAssist-Python/regenerate-database.py
+2. LibAssist-Python/main.py
+
+The first of these creates an initial database and populates it with books and users (including the librarian user Haydes). The second starts the server application itself. These applications will depend upon two Python packages: Flask and bcrypt
+
