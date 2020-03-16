@@ -14,13 +14,14 @@
     <input type="submit" value="return book">
 </form>
 {% else %}
+<p>You haven't check out any book currently!</p>
 <form method="POST" action="/checkout">
     <label for="bookid">Title or ISBN:</label><br>
-    <input type="text" id="bookid" name="bookid" required>
+    <input type="text" id="bookid" name="bookid" required><br/>
     <label for="radio-title">Title:</label>
     <input type="radio" id="radio-title" name="idtype" value="use-title" checked required>
     <label for="radio-isbn">ISBN:</label>
-    <input type="radio" id="radio-isbn" name="idtype" value="use-isbn" required>
+    <input type="radio" id="radio-isbn" name="idtype" value="use-isbn" required><br/>
     <input type="submit" value="checkout"><br>
 </form>
 <br>
