@@ -34,7 +34,7 @@ def register():
         create_user(username, password)
         return render_template('login.html', message='Success! User created')
     except IntegrityError:
-        return render_template('login.html', message='User alredady exists!')
+        return render_template('login.html', message='User already exists!')
 
 
 # Attempt to login the user.
