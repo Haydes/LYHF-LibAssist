@@ -3,9 +3,7 @@
 from requests import Session
 from time import perf_counter
 
-
 SITE_URL = 'http://localhost:5000'
-
 
 def test_many_logins():
     nlogins = 100
@@ -35,3 +33,4 @@ def test_many_logins():
         # This should hold true even when 100 sessions are active.
         assert (t2 - t1) < 10
     assert nlogins == len(sessions)
+
